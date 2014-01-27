@@ -45,3 +45,8 @@ class ReceiverPlugin(Plugin):
     def loop(self):
         while True:
             self.receive(self.insock.recv_string())
+
+    def receive(self, message):
+        logging.error('No receiver in plugin {}'.format(
+                                                       self.__class__.__name__))
+        raise NotImplementedError
