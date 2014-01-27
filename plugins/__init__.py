@@ -35,11 +35,12 @@ class SenderPlugin(Plugin):
 
 
 class ReceiverPlugin(Plugin):
-    messagefilter = ''
+    messagefilter = ('',)
     def __init__(self, *args, **kwargs):
         Plugin.__init__(self, *args, **kwargs)
         self.insock = kwargs['zmq_context'].socket(zmq.SUB)
-        self.insock.setsockopt_string(zmq.SUBSCRIBE, self.messagefilter)
+        for filter_ in self.messagefilters:
+            self.insock.setsockopt_string(zmq.SUBSCRIBE, filter_)
         self.insock.connect("inproc://toplugin")
 
     def loop(self):
