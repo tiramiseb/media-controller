@@ -95,6 +95,7 @@ if len(sys.argv) > 1:
 else:
     configfile = DEFAULTS.configfile
 conf = configparser.ConfigParser()
+conf.optionxform = str
 conf.read_file(open(configfile))
 
 

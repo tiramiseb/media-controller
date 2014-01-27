@@ -46,6 +46,9 @@ class Plugin:
                 )
                 raise StopPlugin
 
+    def allconf(self):
+        return self.configparser.items(self.section)
+
     def error(self, msg):
         logging.error(msg)
         raise StopPlugin
