@@ -1,21 +1,55 @@
 """
 Configuration keys:
 
-* irsend : path to the irsend command
-* device : path to the LIRC device (/var/run/lirc/...)
-* remotename : name of the remote in /etc/lirc/lircd.conf
-* (optional) statusfile : file where to store the status
+* irsend: path to the irsend command
+* device: path to the LIRC device (/var/run/lirc/...)
+* remotename: name of the remote in /etc/lirc/lircd.conf
+* (optional) statusfile: file where to store the status
 
 This plugin understands the following messages:
 
-- sound:vol+
-- sound:vol-
-- sound:mute
-- z680:input direct
-- z680:input optical
-- z680:input coax
-- z680:power on
-- z680:power off
+* sound:vol+
+* sound:vol-
+* sound:mute
+* z680:input direct
+* z680:input optical
+* z680:input coax
+* z680:power on
+* z680:power off
+
+The lines in /etc/lirclircd.conf should be:
+begin remote
+  name  LogitechZ680
+  bits           16
+  flags SPACE_ENC|CONST_LENGTH
+  eps            30
+  aeps          100
+  header       9041  4412
+  one           604  1620
+  zero          604   494
+  ptrail        610
+  repeat       9042  2174
+  pre_data_bits   16
+  pre_data       0x10EF
+  gap          107692
+  toggle_bit_mask 0x0
+      begin codes
+          test                     0xA05F
+          power                    0x08F7
+          input                    0x906F
+          effect                   0xB847
+          settings                 0xF807
+          sub+                     0xC03F
+          sub-                     0x807F
+          center+                  0x40BF
+          center-                  0x609F
+          surround+                0x00FF
+          surround-                0x20DF
+          mute                     0x6897
+          +                        0x58A7
+          -                        0x708F
+      end codes
+end remote
 """
 
 # Default modules
