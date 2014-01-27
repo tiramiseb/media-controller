@@ -25,8 +25,7 @@ class DEFAULTS:
 class MediaController:
     def __init__(self):
         self.plugins = []
-        self.zmq_context = zmq.Context.instance()
-        self.hub = Hub(self.zmq_context)
+        self.hub = Hub()
         self.__init_plugins()
 
     def __init_plugins(self):
@@ -48,8 +47,7 @@ class MediaController:
                 else:
                     plugclass = getattr(plugmodule, plugname.capitalize())
                     self.plugins.append(
-                        plugclass(conf=conf, section=section,
-                                  zmq_context=self.zmq_context)
+                        plugclass(conf=conf, section=section)
                     )
 
     def run(self):
@@ -65,7 +63,7 @@ class MediaController:
 
 
 class Hub:
-    def __init__(self, zmq_context):
+    def __init__(self):
         self.insock = zmq.Context.instance().socket(zmq.SUB)
         self.outsock = zmq.Context.instance().socket(zmq.PUB)
         self.insock.setsockopt_string(zmq.SUBSCRIBE, '')
