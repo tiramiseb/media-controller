@@ -72,7 +72,6 @@ class ReceiverPlugin(Plugin):
         self.insock.connect("inproc://toplugin")
 
     def loop(self):
-        self.irsend('a')
         while True:
             self.receive(self.insock.recv_string())
 
