@@ -20,8 +20,8 @@ class Plugin:
         self.thread = threading.Thread(target=self.__loop)
 
     def run(self):
+        logging.info('Starting plugin from section [{}]'.format(self.section))
         self.thread.start()
-        logging.info('Started plugin from section [{}]'.format(self.section))
 
     def __loop(self):
         try:
