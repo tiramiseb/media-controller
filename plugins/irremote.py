@@ -1,11 +1,12 @@
 # Default modules
+import logging
 import tempfile
 
 # Dependencies
 import lirc
 
 # Local modules
-from plugins import SenderPlugin
+from plugins import SenderPlugin, StopPlugin
 
 ################################################################################
 
@@ -25,7 +26,15 @@ class Irremote(SenderPlugin):
         lircrc.close()
 
     def loop(self):
-        sockid = lirc.init("mediacontroller", self.lircrc)
+        try:
+            sockid = lirc.init("mediacontroller", self.lircrc)
+        except lirc.InitError:
+            logging.error(
+                'Failed to initialize LIRC, from section [{}]'.format(
+                    self.section
+                )
+            )
+            raise StopPlugin
         lirc.set_blocking(True, sockid)
         while True:
             self.send(lirc.nextcode())
