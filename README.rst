@@ -19,6 +19,6 @@ Messages
 
 The following standardized messages may be used:
 
-sound:vol+ : increase the audio volume
-sound:vol- : decrease the audio volume
-sound:mute : mute the audio
+* sound:vol+ : increase the audio volume
+* sound:vol- : decrease the audio volume
+* sound:mute : mute the audio
