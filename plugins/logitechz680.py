@@ -60,6 +60,11 @@ import time
 # Local modules
 from plugins import ReceiverPlugin, StopPlugin
 
+try:
+   filenotfoundexception = FileNotFoundError
+except NameError:
+   filenotfoundexception = IOError
+
 ################################################################################
 
 class DEFAULTS:
@@ -89,7 +94,7 @@ class Logitechz680(ReceiverPlugin):
     def __read_status(self):
         try:
             statusfile = open(self.conf('statusfile', DEFAULTS.statusfile), 'r')
-        except FileNotFoundError:
+        except filenotfoundexception:
             self.current_input = inputs[0]
             self.current_power = False
             return
