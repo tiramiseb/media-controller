@@ -77,7 +77,9 @@ class Hub:
 
     def loop(self):
         while True:
-            self.outsock.send_string(self.insock.recv_string())
+            msg = self.insock.recv_string()
+            logging.debug('New message on the bus: {}'.format(msg))
+            self.outsock.send_string(msg)
 
 
 def main():
