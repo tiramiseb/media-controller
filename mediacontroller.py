@@ -73,6 +73,7 @@ class Hub:
 
     def run(self):
         self.thread.start()
+        logging.info('Started the hub')
 
     def loop(self):
         while True:

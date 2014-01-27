@@ -21,6 +21,7 @@ class Plugin:
 
     def run(self):
         self.thread.start()
+        logging.info('Started plugin from section [{}]'.format(self.section))
 
     def __loop(self):
         try:
@@ -31,16 +32,19 @@ class Plugin:
                 'previous error'.format(self.section)
             )
 
-    def conf(self, key):
+    def conf(self, key, default=None):
         try:
             return self.configparser.get(self.section, key)
         except configparser.NoOptionError:
-            logging.error(
-                'No option "{}" found in section [{}]'.format(
-                    key, self.section
+            if default:
+                return default
+            else:
+                logging.error(
+                    'No option "{}" found in section [{}]'.format(
+                        key, self.section
+                    )
                 )
-            )
-            raise StopPlugin
+                raise StopPlugin
 
     def error(self, msg):
         logging.error(msg)
