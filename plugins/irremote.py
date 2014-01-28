@@ -6,6 +6,7 @@ value is the message to send when pressing this button.
 # Default modules
 import logging
 import tempfile
+import time
 
 # Dependencies
 import lirc
@@ -40,6 +41,9 @@ class Irremote(SenderPlugin):
                 )
             )
             raise StopPlugin
-        lirc.set_blocking(True, sockid)
+        lirc.set_blocking(False, sockid)
         while True:
-            self.send(lirc.nextcode())
+            code = lirc.nextcode()[0]
+            if code:
+                self.send(code[0])
+            time.sleep(0.1)
