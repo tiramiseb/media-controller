@@ -1,3 +1,4 @@
 daemonize
+psutil
 python-lirc
 pyzmq==2.2.0.1
