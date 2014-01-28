@@ -8,13 +8,6 @@ from plugins import SenderPlugin
 
 ################################################################################
 
-#class MediaControllerShell(cmd.Cmd):
-    #def __init__(self, *args, **kwargs):
-        #cmd.Cmd.__init__(self, *args, **kwargs)
-
-    #def do_EOF(self):
-
-
 class Cli(SenderPlugin, cmd.Cmd):
     prompt = 'media-controller> '
     def __init__(self, *args, **kwargs):
