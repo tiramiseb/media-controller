@@ -47,7 +47,10 @@ class Cli(SenderPlugin, cmd.Cmd):
     # The loop
 
     def loop(self):
-        self.cmdloop()
+        if self.configparser.getboolean('main', 'daemon'):
+            logging.info('Not starting the CLI in daemon mode')
+        else:
+            self.cmdloop()
 
     def preloop(self):
         time.sleep(0.5)
