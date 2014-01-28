@@ -78,9 +78,10 @@ class Hub:
     def loop(self):
         while True:
             msg = self.insock.recv_string()
+            if msg == 'stop':
+                break
             logging.debug('New message on the bus: {}'.format(msg))
             self.outsock.send_string(msg)
-
 
 def main():
     "Main loop"

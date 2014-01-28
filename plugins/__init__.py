@@ -18,6 +18,7 @@ class Plugin:
         self.configparser = conf
         self.section = section
         self.thread = threading.Thread(target=self.__loop)
+        self.thread.daemon = True
 
     def run(self):
         logging.info('Starting plugin from section [{}]'.format(self.section))
