@@ -69,7 +69,7 @@ except NameError:
 
 class DEFAULTS:
     statusfile = 'logitech_z680.status'
-    wait_between_impulses = 0.5
+    wait_between_impulses = 0.25
 
 translation_table = {
     'sound:vol+': '+',
@@ -141,7 +141,8 @@ class Logitechz680(ReceiverPlugin):
                 '-d',
                 self.lirc_device,
                 'SEND_ONCE',
-                self.lirc_remotename
+                self.lirc_remotename,
+                code
             ))
             time.sleep(DEFAULTS.wait_between_impulses)
         except FileNotFoundError:
