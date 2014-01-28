@@ -25,9 +25,11 @@ class Cli(SenderPlugin, cmd.Cmd):
     # Stop the controller
 
     def do_stop(self, arg):
+        "Stop the controller"
         return True
 
     def do_EOF(self, arg):
+        "Stop the controller"
         print('')
         return True
 
@@ -35,9 +37,11 @@ class Cli(SenderPlugin, cmd.Cmd):
     # Send message
 
     def do_s(self, arg):
+        "Send a message"
         self.send(arg)
 
     def do_send(self, arg):
+        "Send a message"
         self.send(arg)
 
     def emptyline(self):
