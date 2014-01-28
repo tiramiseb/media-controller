@@ -61,7 +61,6 @@ class Freebox(ReceiverPlugin):
             self.conf('boxnumber'),
             self.conf('remotecode')
         )
-        print(self.url)
 
     def receive(self, msg):
         if msg.startswith('freebox:remote:'):
