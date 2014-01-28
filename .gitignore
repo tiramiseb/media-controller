@@ -38,3 +38,6 @@ nosetests.xml
 .kateproject
 .kateproject.d
 .pydevproject
+
+# Virtualenv
+venv/
