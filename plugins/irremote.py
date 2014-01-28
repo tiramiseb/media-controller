@@ -1,3 +1,8 @@
+"""
+Each configuration key is a button name from LIRC, and its
+value is the message to send when pressing this button.
+"""
+
 # Default modules
 import logging
 import tempfile
