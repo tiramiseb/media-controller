@@ -12,10 +12,9 @@ This plugin understands the following messages:
 
 # Default modules
 import logging
+import os
+import signal
 import subprocess
-
-# Dependencies
-import psutil
 
 # Local modules
 from plugins import Plugin
@@ -45,6 +44,12 @@ class Squeezebox(Plugin):
 
     def stop(self):
         procname = self.sqpath.split('/')[-1]
-        for proc in psutil.process_iter():
-            if proc.name == procname:
-                proc.kill()
+        for pid in os.listdir('/proc'):
+            try:
+                numpid = int(pid)
+            except:
+                # If the dirname (pid) is not a number, it is not a processus
+                continue
+            this_proc_cmd = open(os.path.join('/proc', pid, 'comm')).read()
+            if this_proc_cmd == procname:
+                os.kill(numpid, signal.SIGTERM)

@@ -1,3 +1,2 @@
 daemonize
-psutil
 python-lirc
