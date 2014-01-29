@@ -1,10 +1,8 @@
 # Default modules
 import configparser
 import logging
+import queue
 import threading
-
-# Dependencies
-import zmq
 
 ################################################################################
 
@@ -14,9 +12,11 @@ class StopPlugin(Exception):
 ################################################################################
 
 class Plugin:
-    def __init__(self, conf, section, *args, **kwargs):
+    def __init__(self, conf, section, queue_to_hub, *args, **kwargs):
         self.configparser = conf
         self.section = section
+        self.outqueue = queue_to_hub
+        self.inqueue = queue.Queue()
         self.thread = threading.Thread(target=self.__loop)
         self.thread.daemon = True
 
@@ -32,6 +32,10 @@ class Plugin:
                 'Stopping plugin from section [{}] because of a '
                 'previous error'.format(self.section)
             )
+
+    def send(self, message):
+        """Send message to the hub, which will dispatch to all plugins"""
+        self.outqueue.put(message)
 
     def conf(self, key, default=None):
         try:
@@ -55,33 +59,18 @@ class Plugin:
         raise StopPlugin
 
 
-class SenderPlugin(Plugin):
-    def __init__(self, *args, **kwargs):
-        Plugin.__init__(self, *args, **kwargs)
-        self.outsock = zmq.Context.instance().socket(zmq.PUB)
-        self.outsock.connect("inproc://fromplugin")
 
+class SenderPlugin(Plugin):
     def loop(self):
         logging.error('No loop in plugin {}'.format(self.__class__.__name__))
         raise NotImplementedError
 
-    def send(self, message):
-        self.outsock.send_string(message)
-
 
 
 class ReceiverPlugin(Plugin):
-    messagefilter = ('',)
-    def __init__(self, *args, **kwargs):
-        Plugin.__init__(self, *args, **kwargs)
-        self.insock = zmq.Context.instance().socket(zmq.SUB)
-        for filter_ in self.messagefilters:
-            self.insock.setsockopt_string(zmq.SUBSCRIBE, filter_)
-        self.insock.connect("inproc://toplugin")
-
     def loop(self):
         while True:
-            self.receive(self.insock.recv_string())
+            self.receive(self.inqueue.get())
 
     def receive(self, message):
         logging.error('No receiver in plugin {}'.format(

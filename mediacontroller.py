@@ -4,12 +4,12 @@
 import configparser
 import importlib
 import logging
+import queue
 import sys
 import threading
 
 # Dependencies
 from daemonize import Daemonize
-import zmq
 
 ################################################################################
 # Default values
@@ -25,7 +25,7 @@ class DEFAULTS:
 class MediaController:
     def __init__(self):
         self.plugins = []
-        self.hub = Hub()
+        self.hub = Hub(self)
         self.__init_plugins()
 
     def __init_plugins(self):
@@ -47,28 +47,27 @@ class MediaController:
                 else:
                     plugclass = getattr(plugmodule, plugname.capitalize())
                     self.plugins.append(
-                        plugclass(conf=conf, section=section)
+                        plugclass(conf=conf, section=section,
+                                  queue_to_hub=self.hub.inqueue)
                     )
 
     def run(self):
         self.__start_hub()
         self.__start_plugins()
 
+    def __start_hub(self):
+        self.hub.run()
+
     def __start_plugins(self):
         for plugin in self.plugins:
             plugin.run()
 
-    def __start_hub(self):
-        self.hub.run()
 
 
 class Hub:
-    def __init__(self):
-        self.insock = zmq.Context.instance().socket(zmq.SUB)
-        self.outsock = zmq.Context.instance().socket(zmq.PUB)
-        self.insock.setsockopt_string(zmq.SUBSCRIBE, '')
-        self.insock.bind('inproc://fromplugin')
-        self.outsock.bind('inproc://toplugin')
+    def __init__(self, controller):
+        self.controller = controller
+        self.inqueue = queue.Queue()
         self.thread = threading.Thread(target=self.loop)
 
     def run(self):
@@ -77,11 +76,17 @@ class Hub:
 
     def loop(self):
         while True:
-            msg = self.insock.recv_string()
+            msg = self.inqueue.get()
             if msg == 'stop':
                 break
             logging.debug('New message on the bus: {}'.format(msg))
-            self.outsock.send_string(msg)
+            self.__send_to_plugins(msg)
+
+    def __send_to_plugins(self, msg):
+        for plugin in self.controller.plugins:
+            plugin.inqueue.put(msg)
+
+
 
 def main():
     "Main loop"
