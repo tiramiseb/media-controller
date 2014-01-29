@@ -18,15 +18,14 @@ import subprocess
 import psutil
 
 # Local modules
-from plugins import ReceiverPlugin
+from plugins import Plugin
 
 ################################################################################
 
-class Squeezebox(ReceiverPlugin):
-    messagefilters = ('squeezebox:')
+class Squeezebox(Plugin):
 
     def __init__(self, *args, **kwargs):
-        ReceiverPlugin.__init__(self, *args, **kwargs)
+        Plugin.__init__(self, *args, **kwargs)
         self.sqpath = self.conf('squeezelitepath')
         self.sqname = self.conf('name')
 

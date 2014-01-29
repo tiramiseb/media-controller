@@ -12,13 +12,14 @@ import time
 import lirc
 
 # Local modules
-from plugins import SenderPlugin, StopPlugin
+from plugins import Plugin, StopPlugin
 
 ################################################################################
 
-class Irremote(SenderPlugin):
+class Irremote(Plugin):
+
     def __init__(self, *args, **kwargs):
-        SenderPlugin.__init__(self, *args, **kwargs)
+        Plugin.__init__(self, *args, **kwargs)
         lircrc = tempfile.NamedTemporaryFile('w', delete=False)
         self.lircrc = lircrc.name
         for key, value in self.allconf():

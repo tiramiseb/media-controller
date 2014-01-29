@@ -58,7 +58,7 @@ import subprocess
 import time
 
 # Local modules
-from plugins import ReceiverPlugin, StopPlugin
+from plugins import Plugin, StopPlugin
 
 try:
    filenotfoundexception = FileNotFoundError
@@ -81,11 +81,10 @@ inputs = ['direct', 'optical', 'coax']
 
 ################################################################################
 
-class Logitechz680(ReceiverPlugin):
-    messagefilters = ('sound', 'z680')
+class Logitechz680(Plugin):
 
     def __init__(self, *args, **kwargs):
-        ReceiverPlugin.__init__(self, *args, **kwargs)
+        Plugin.__init__(self, *args, **kwargs)
         self.lirc_irsend = self.conf('irsend')
         self.lirc_device = self.conf('device')
         self.lirc_remotename = self.conf('remotename')

@@ -4,14 +4,15 @@ import readline
 import time
 
 # Local modules
-from plugins import SenderPlugin
+from plugins import Plugin
 
 ################################################################################
 
-class Cli(SenderPlugin, cmd.Cmd):
+class Cli(Plugin, cmd.Cmd):
     prompt = 'media-controller> '
+
     def __init__(self, *args, **kwargs):
-        SenderPlugin.__init__(self, *args, **kwargs)
+        Plugin.__init__(self, *args, **kwargs)
         cmd.Cmd.__init__(self)
 
     #######################################################

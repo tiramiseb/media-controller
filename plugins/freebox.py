@@ -46,15 +46,14 @@ import urllib.error
 import urllib.request
 
 # Local modules
-from plugins import ReceiverPlugin
+from plugins import Plugin
 
 ################################################################################
 
-class Freebox(ReceiverPlugin):
-    messagefilters = ('freebox:')
+class Freebox(Plugin):
 
     def __init__(self, *args, **kwargs):
-        ReceiverPlugin.__init__(self, *args, **kwargs)
+        Plugin.__init__(self, *args, **kwargs)
 
         self.url = ('http://hd{}.freebox.fr/pub/'
                     'remote_control?code={}&key={{}}').format(

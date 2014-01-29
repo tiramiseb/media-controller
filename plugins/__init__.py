@@ -58,21 +58,11 @@ class Plugin:
         logging.error(msg)
         raise StopPlugin
 
-
-
-class SenderPlugin(Plugin):
     def loop(self):
-        logging.error('No loop in plugin {}'.format(self.__class__.__name__))
-        raise NotImplementedError
-
-
-
-class ReceiverPlugin(Plugin):
-    def loop(self):
+        """Override this in a sender plugin"""
         while True:
             self.receive(self.inqueue.get())
 
     def receive(self, message):
-        logging.error('No receiver in plugin {}'.format(
-                                                       self.__class__.__name__))
-        raise NotImplementedError
+        """Override this in a receiver plugin"""
+        pass
